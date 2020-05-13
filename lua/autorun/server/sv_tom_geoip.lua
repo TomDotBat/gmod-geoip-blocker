@@ -11,7 +11,7 @@ local config = {}
 
 --Configuration Start--
 
-config.punishByBan = false --Should we ban the user or just kick them?
+config.banTime = -1 --How long should we ban the use for? 0 for permanent, -1 to kick instead
 
 config.isWhitelist = false --Should the country code list be a whitelist or blacklist?
 
