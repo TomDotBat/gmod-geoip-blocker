@@ -24,3 +24,31 @@ config.bypassIDs = { --Who can bypass the GeoIP checks? List of SteamID64s.
 }
 
 --Configuration End--
+
+
+hook.Add("CheckPassword", "TomGeoIP.CheckPassword", function(steamid, ip, svpass, clpass, name)
+    if config.bypassIDs[steamid] then return end
+    if #config.countryList == 0 then return end
+
+    ip = string.Split(ip, ":")[1]
+
+    http.Fetch("http://ip-api.com/json/" .. ip,
+        function(body, len, headers, status)
+            local response = util.JSONToTable(body)
+            if !response then
+                print("[TOM-GEOIP ERROR]: Given an invalid response when looking up " .. name .. ", please investigate.")
+                return
+            end
+
+            if status != 200 then
+                print("[TOM-GEOIP ERROR]: Given a non 200 status code when looking up " .. name .. ", please investigate.")
+                return
+            end
+
+
+        end,
+        function(error)
+            print("[TOM-GEOIP ERROR]: Failed to get GeoIP information about " .. name .. ", please investigate.")
+        end
+    )
+end)
