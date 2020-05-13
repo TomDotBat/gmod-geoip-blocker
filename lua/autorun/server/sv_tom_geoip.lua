@@ -50,6 +50,11 @@ hook.Add("CheckPassword", "TomGeoIP.CheckPassword", function(steamid, ip, svpass
                 return
             end
 
+            if config.isWhitelist and config.countryList[response.countryCode] then return end
+            if !config.isWhitelist and !config.countryList[response.countryCode] then return end
+
+            --kick the baguette
+
         end,
         function(error)
             print("[TOM-GEOIP ERROR]: Failed to get GeoIP information about " .. name .. ", please investigate.")
