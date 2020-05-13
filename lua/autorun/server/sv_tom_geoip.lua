@@ -35,7 +35,7 @@ hook.Add("CheckPassword", "TomGeoIP.CheckPassword", function(steamid, ip, svpass
     http.Fetch("http://ip-api.com/json/" .. ip,
         function(body, len, headers, status)
             local response = util.JSONToTable(body)
-            if !response then
+            if !response or !response.countryCode or !response.query then
                 print("[TOM-GEOIP ERROR]: Given an invalid response when looking up " .. name .. ", please investigate.")
                 return
             end
@@ -45,6 +45,10 @@ hook.Add("CheckPassword", "TomGeoIP.CheckPassword", function(steamid, ip, svpass
                 return
             end
 
+            if response.query != ip then
+                print("[TOM-GEOIP ERROR]: API returned data for wrong IP  " .. name .. ", please investigate.")
+                return
+            end
 
         end,
         function(error)
