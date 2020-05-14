@@ -58,7 +58,7 @@ hook.Add("CheckPassword", "TomGeoIP.CheckPassword", function(steamid, ip, svpass
             if config.isWhitelist and config.countryList[response.countryCode] then return end
             if !config.isWhitelist and !config.countryList[response.countryCode] then return end
 
-            game.KickID(steamid, msg)
+            game.KickID(steamid, string.format(config.punishMessage, response.country or response.countryCode))
 
             if config.banTime == -1 then return end
             RunConsoleCommand("banid", config.banTime, util.SteamIDFrom64(steamid))
