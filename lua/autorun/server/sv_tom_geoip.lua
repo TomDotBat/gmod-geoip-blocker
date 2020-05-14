@@ -11,7 +11,7 @@ local config = {}
 
 --Configuration Start--
 
-config.banTime = -1 --How long should we ban the use for? 0 for permanent, -1 to kick instead
+config.banTime = -1 --How long should we ban the user for in minutes? 0 for permanent, -1 to kick instead
 
 config.punishMessage = [[
     [TOM-GEOIP] Your country %s is not allowed on this server.
