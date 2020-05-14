@@ -13,6 +13,12 @@ local config = {}
 
 config.banTime = -1 --How long should we ban the use for? 0 for permanent, -1 to kick instead
 
+config.punishMessage = [[
+    [TOM-GEOIP] Your country %s is not allowed on this server.
+    If you believe this is an error please contact us:
+    https://ourserverwebsite.com
+]]
+
 config.isWhitelist = false --Should the country code list be a whitelist or blacklist?
 
 config.countryList = { --Which countries should we white/blacklist? List of country codes, use: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements
@@ -24,7 +30,6 @@ config.bypassIDs = { --Who can bypass the GeoIP checks? List of SteamID64s.
 }
 
 --Configuration End--
-
 
 hook.Add("CheckPassword", "TomGeoIP.CheckPassword", function(steamid, ip, svpass, clpass, name)
     if config.bypassIDs[steamid] then return end
@@ -53,8 +58,10 @@ hook.Add("CheckPassword", "TomGeoIP.CheckPassword", function(steamid, ip, svpass
             if config.isWhitelist and config.countryList[response.countryCode] then return end
             if !config.isWhitelist and !config.countryList[response.countryCode] then return end
 
-            --kick the baguette
+            game.KickID(steamid, msg)
 
+            if config.banTime == -1 then return end
+            RunConsoleCommand("banid", config.banTime, util.SteamIDFrom64(steamid))
         end,
         function(error)
             print("[TOM-GEOIP ERROR]: Failed to get GeoIP information about " .. name .. ", please investigate.")
