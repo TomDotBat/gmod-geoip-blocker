@@ -64,7 +64,7 @@ hook.Add("CheckPassword", "TomGeoIP.CheckPassword", function(steamid, ip, svpass
             RunConsoleCommand("banid", config.banTime, util.SteamIDFrom64(steamid))
         end,
         function(error)
-            print("[TOM-GEOIP ERROR]: Failed to get GeoIP information about " .. name .. ", please investigate.")
+            print("[TOM-GEOIP ERROR]: Failed to get GeoIP information about " .. name .. ", please investigate the error below:\n" .. error)
         end
     )
 end)
